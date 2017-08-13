@@ -2,6 +2,13 @@ export const COLLAPSE_STORIES_TYPE = 'drawer/COLLAPSE_STORIES_TYPE';
 export const COLLAPSE_CATEGORIES = 'drawer/COLLAPSE_CATEGORIES';
 export const FLUSH_DRAWER = 'drawer/FLUSH_DRAWER';
 
+export const collapseStoryType = () => ({
+  type: COLLAPSE_STORIES_TYPE,
+});
+export const collapseCategories = () => ({
+  type: collapseStoryType,
+});
+
 const initialState = {
   isStoriesTypeExpande: true,
   isCategoriesExpande:false,

@@ -3,11 +3,13 @@ import {
   View, Text, StyleSheet, TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 class HomeContainer extends Component {
   render(){
     return (     
       <View style={styles.container}>
+         <Icon name="menu" size={300} color="black" />
         <TouchableOpacity onPress={() => {}}>
           <View>
             <Text style={styles.welcome}>
