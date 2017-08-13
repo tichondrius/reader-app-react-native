@@ -1,3 +1,4 @@
+
 import { REHYDRATE } from 'redux-persist/constants';
 import { fork, call, take, put, all, select } from 'redux-saga/effects';
 import { fetchStories } from '../../../services-api/services';
@@ -6,7 +7,19 @@ import * as comicstoriesContanst from '../../modules/data/comicstories';
 import * as readstoriesContant from '../../modules/data/readstories';
 
 
-export function* fetchStory() {
+
+const processDataFetch = function* (response, FETCH_DONE, FETCH_FAILE){
+
+  const { error, data } = response;
+  if (!error) {
+    yield put({ type: FETCH_DONE, stories: data });
+  }
+  else yield put({ type: FETCH_FAILE, error }); 
+}
+
+
+
+const fetchStory =  function* () {
   try {
     yield all([
       put({ type: allstoriesContanst.FETCHING_ALL_STORIES }),
@@ -20,10 +33,19 @@ export function* fetchStory() {
     ]);
 
     yield all([
-      put({ type: allstoriesContanst.FETCH_ALL_STORIES_DONE, stories: allstories }),
-      put({ type: comicstoriesContanst.FETCH_COMIC_STORIES_DONE, stories: comicstories }),
-      put({ type: readstoriesContant.FETCH_MORE_READ_STORIES_DONE, stories: readstories }), 
-    ]);
+      processDataFetch(
+        allstories,
+        allstoriesContanst.FETCH_ALL_STORIES_DONE,
+        allstoriesContanst.FETCH_ALL_STORIES_FAILE),
+      processDataFetch(
+        comicstories,
+        comicstoriesContanst.FETCH_COMIC_STORIES_DONE,
+        allstoriesContanst.FETCH_ALL_STORIES_FAILE),
+      processDataFetch(
+        readstories,
+        allstoriesContanst.FETCH_ALL_STORIES_DONE,
+        allstoriesContanst.FETCH_ALL_STORIES_FAILE),
+    ])
 
   } catch (error) {
     yield all([
@@ -35,18 +57,14 @@ export function* fetchStory() {
 }
 
 
-export function* fetchCategories() {
-  
-}
 
 
 
-
-
-export default function* watchConfig() {
+const fetchFlow = function* () {
   yield take(REHYDRATE);
   yield all([
     fetchStory(),
-    fetchCategories(),
   ]);
 }
+
+export default fetchFlow;
