@@ -9,12 +9,12 @@ import {
   AppRegistry,
 } from 'react-native';
 
-import HomeScene from './source/scenes/HomeScene';
+import Root from './source';
 
 export default class TruyenHay extends Component {
   render() {
     return (
-      <HomeScene/>
+      <Root />
     );
   }
 }
